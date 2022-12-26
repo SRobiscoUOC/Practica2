@@ -68,7 +68,7 @@ if (!require('dplyr')) install.packages('dplyr'); library('dplyr')
 Ahora cargamos el fichero de datos.
 
 ```{r}
-dataset <- read.csv('./dataset/detecciones_ondas_gravitacionales.csv',stringsAsFactors = FALSE)
+dataset <- read.csv('../dataset/detecciones_ondas_gravitacionales.csv',stringsAsFactors = FALSE)
 filas=dim(dataset)[1]
 ```
 
