@@ -203,11 +203,21 @@ Con estos datos queremos intentar responder algunas preguntas:
   
 ## Integración y selección de los datos de interés a analizar. Puede ser el resultado de adicionar diferentes datasets o una subselección útil de los datos originales, en base al objetivo que se quiera conseguir.
 
-Aquí podemos hacer un análisis de los datos relevantes como los que hemos visto en la teoría para decidir qué datos tomar.
+Aquí podemos hacer un análisis de los datos relevantes como los que hemos visto en la teoría para decidir qué datos tomar. Pero antes necesitamos hacer los pasos posteriores.
 
 ## Limpieza de los datos.
 
 ### ¿Los datos contienen ceros o elementos vacíos? Gestiona cada uno de estos casos.
+Veamos las estadísticas de valores nulos:
+
+```{r}
+colSums(is.na(dataset))
+```
+
+Ahora las de valores vacíos:
+```{r}
+colSums(dataset=="")
+```
 
 ### Identifica y gestiona los valores extremos.
 

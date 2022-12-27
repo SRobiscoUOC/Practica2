@@ -630,7 +630,8 @@ selección de los datos de interés a analizar. Puede ser el resultado de
 adicionar diferentes datasets o una subselección útil de los datos
 originales, en base al objetivo que se quiera conseguir.</h2>
 <p>Aquí podemos hacer un análisis de los datos relevantes como los que
-hemos visto en la teoría para decidir qué datos tomar.</p>
+hemos visto en la teoría para decidir qué datos tomar. Pero antes
+necesitamos hacer los pasos posteriores.</p>
 </div>
 <div id="limpieza-de-los-datos." class="section level2" number="2.3">
 <h2><span class="header-section-number">2.3</span> Limpieza de los
@@ -639,6 +640,82 @@ datos.</h2>
 <h3><span class="header-section-number">2.3.1</span> ¿Los datos
 contienen ceros o elementos vacíos? Gestiona cada uno de estos
 casos.</h3>
+<p>Veamos las estadísticas de valores nulos:</p>
+<pre class="r"><code>colSums(is.na(dataset))</code></pre>
+<pre><code>##                            name                         version 
+##                               0                               0 
+##                         release                             gps 
+##                               0                               0 
+##                          mass_1                    mass_1_upper 
+##                              26                              26 
+##                    mass_1_lower                          mass_2 
+##                              26                              26 
+##                    mass_2_upper                    mass_2_lower 
+##                              26                              26 
+##                     network_snr               network_snr_upper 
+##                               0                              33 
+##               network_snr_lower                        distance 
+##                              33                              26 
+##                  distance_upper                  distance_lower 
+##                              26                              26 
+##                         chi_eff                   chi_eff_upper 
+##                              26                              26 
+##                   chi_eff_lower                      total_mass 
+##                              26                              37 
+##                total_mass_upper                total_mass_lower 
+##                              37                              37 
+##                      chirp_mass                chirp_mass_upper 
+##                              26                              26 
+##                chirp_mass_lower       detector_frame_chirp_mass 
+##                              26                             103 
+## detector_frame_chirp_mass_upper detector_frame_chirp_mass_lower 
+##                             117                             117 
+##                        redshift                  redshift_upper 
+##                              26                              26 
+##                  redshift_lower                false_alarm_rate 
+##                              26                               0 
+##                         p_astro                      final_mass 
+##                               0                               0 
+##                final_mass_upper                final_mass_lower 
+##                              28                              28</code></pre>
+<p>Ahora las de valores vacíos:</p>
+<pre class="r"><code>colSums(dataset==&quot;&quot;)</code></pre>
+<pre><code>##                            name                         version 
+##                               0                               0 
+##                         release                             gps 
+##                               0                               0 
+##                          mass_1                    mass_1_upper 
+##                              NA                              NA 
+##                    mass_1_lower                          mass_2 
+##                              NA                              NA 
+##                    mass_2_upper                    mass_2_lower 
+##                              NA                              NA 
+##                     network_snr               network_snr_upper 
+##                               0                              NA 
+##               network_snr_lower                        distance 
+##                              NA                              NA 
+##                  distance_upper                  distance_lower 
+##                              NA                              NA 
+##                         chi_eff                   chi_eff_upper 
+##                              NA                              NA 
+##                   chi_eff_lower                      total_mass 
+##                              NA                              NA 
+##                total_mass_upper                total_mass_lower 
+##                              NA                              NA 
+##                      chirp_mass                chirp_mass_upper 
+##                              NA                              NA 
+##                chirp_mass_lower       detector_frame_chirp_mass 
+##                              NA                              NA 
+## detector_frame_chirp_mass_upper detector_frame_chirp_mass_lower 
+##                              NA                              NA 
+##                        redshift                  redshift_upper 
+##                              NA                              NA 
+##                  redshift_lower                false_alarm_rate 
+##                              NA                               0 
+##                         p_astro                      final_mass 
+##                              20                              27 
+##                final_mass_upper                final_mass_lower 
+##                              NA                              NA</code></pre>
 </div>
 <div id="identifica-y-gestiona-los-valores-extremos." class="section level3" number="2.3.2">
 <h3><span class="header-section-number">2.3.2</span> Identifica y
