@@ -607,6 +607,181 @@ colisión. Medida en masas solares.</p>
 la masa final.</p>
 <p><strong>final_mass_lower</strong> valor mínimo del rángo de error de
 la masa final.</p>
+<p>Ahora que hemos descrito los datos de nuestro dataset los conoceremos
+mejor obteniendo sus estadísticas básicas:</p>
+<pre class="r"><code>summary(dataset)</code></pre>
+<pre><code>##      name             version            release               gps           
+##  Length:119         Length:119         Length:119         Min.   :1.126e+09  
+##  Class :character   Class :character   Class :character   1st Qu.:1.240e+09  
+##  Mode  :character   Mode  :character   Mode  :character   Median :1.249e+09  
+##                                                           Mean   :1.236e+09  
+##                                                           3rd Qu.:1.261e+09  
+##                                                           Max.   :1.269e+09  
+##                                                                              
+##      mass_1        mass_1_upper     mass_1_lower         mass_2     
+##  Min.   :  1.46   Min.   :  0.12   Min.   :-33.000   Min.   : 1.17  
+##  1st Qu.: 20.80   1st Qu.:  5.60   1st Qu.: -9.600   1st Qu.: 8.20  
+##  Median : 35.40   Median :  9.80   Median : -6.000   Median :23.30  
+##  Mean   : 34.95   Mean   : 13.13   Mean   : -7.668   Mean   :21.62  
+##  3rd Qu.: 42.20   3rd Qu.: 14.10   3rd Qu.: -3.200   3rd Qu.:29.00  
+##  Max.   :105.50   Max.   :104.00   Max.   : -0.100   Max.   :76.00  
+##  NA&#39;s   :26       NA&#39;s   :26       NA&#39;s   :26        NA&#39;s   :26     
+##   mass_2_upper     mass_2_lower      network_snr    network_snr_upper
+##  Min.   : 0.070   Min.   :-36.500   Min.   : 6.00   Min.   :0.1000   
+##  1st Qu.: 2.200   1st Qu.: -9.300   1st Qu.: 9.10   1st Qu.:0.2000   
+##  Median : 5.500   Median : -5.900   Median :10.70   Median :0.3000   
+##  Mean   : 6.985   Mean   : -6.971   Mean   :12.01   Mean   :0.3349   
+##  3rd Qu.: 9.300   3rd Qu.: -2.400   3rd Qu.:13.15   3rd Qu.:0.4000   
+##  Max.   :27.100   Max.   : -0.060   Max.   :33.00   Max.   :1.7000   
+##  NA&#39;s   :26       NA&#39;s   :26                        NA&#39;s   :33       
+##  network_snr_lower    distance    distance_upper distance_lower   
+##  Min.   :-1.2000   Min.   :  40   Min.   :   7   Min.   :-4290.0  
+##  1st Qu.:-0.6000   1st Qu.: 930   1st Qu.: 340   1st Qu.:-1500.0  
+##  Median :-0.4000   Median :1620   Median : 770   Median : -650.0  
+##  Mean   :-0.4837   Mean   :2098   Mean   :1371   Mean   : -995.8  
+##  3rd Qu.:-0.3000   3rd Qu.:3280   3rd Qu.:1930   3rd Qu.: -380.0  
+##  Max.   :-0.2000   Max.   :8280   Max.   :7000   Max.   :  -15.0  
+##  NA&#39;s   :33        NA&#39;s   :26     NA&#39;s   :26     NA&#39;s   :26       
+##     chi_eff         chi_eff_upper    chi_eff_lower      total_mass    
+##  Min.   :-0.29000   Min.   :0.0200   Min.   :-0.510   Min.   :  3.40  
+##  1st Qu.:-0.03000   1st Qu.:0.1500   1st Qu.:-0.310   1st Qu.: 31.62  
+##  Median : 0.05000   Median :0.2100   Median :-0.220   Median : 58.75  
+##  Mean   : 0.07989   Mean   :0.2173   Mean   :-0.229   Mean   : 57.90  
+##  3rd Qu.: 0.15000   3rd Qu.:0.2600   3rd Qu.:-0.130   3rd Qu.: 74.65  
+##  Max.   : 0.68000   Max.   :0.5000   Max.   :-0.010   Max.   :182.30  
+##  NA&#39;s   :26         NA&#39;s   :26       NA&#39;s   :26       NA&#39;s   :37      
+##  total_mass_upper total_mass_lower    chirp_mass     chirp_mass_upper
+##  Min.   :  0.30   Min.   :-35.700   Min.   : 1.186   Min.   : 0.001  
+##  1st Qu.:  4.20   1st Qu.:-12.000   1st Qu.: 9.000   1st Qu.: 0.660  
+##  Median :  9.45   Median : -7.650   Median :24.400   Median : 3.500  
+##  Mean   : 13.71   Mean   : -8.512   Mean   :23.095   Mean   : 4.720  
+##  3rd Qu.: 17.82   3rd Qu.: -2.800   3rd Qu.:30.900   3rd Qu.: 7.300  
+##  Max.   :100.00   Max.   : -0.100   Max.   :76.000   Max.   :23.000  
+##  NA&#39;s   :37       NA&#39;s   :37        NA&#39;s   :26       NA&#39;s   :26      
+##  chirp_mass_lower  detector_frame_chirp_mass detector_frame_chirp_mass_upper
+##  Min.   :-17.400   Min.   : 0.900            Min.   : 6.00                  
+##  1st Qu.: -5.000   1st Qu.: 1.508            1st Qu.:12.55                  
+##  Median : -2.600   Median : 3.075            Median :19.10                  
+##  Mean   : -3.400   Mean   : 8.742            Mean   :19.10                  
+##  3rd Qu.: -0.600   3rd Qu.: 6.317            3rd Qu.:25.65                  
+##  Max.   : -0.001   Max.   :49.800            Max.   :32.20                  
+##  NA&#39;s   :26        NA&#39;s   :103               NA&#39;s   :117                    
+##  detector_frame_chirp_mass_lower    redshift     redshift_upper  
+##  Min.   :-12.4                   Min.   :0.010   Min.   :0.0000  
+##  1st Qu.:-10.5                   1st Qu.:0.190   1st Qu.:0.0600  
+##  Median : -8.6                   Median :0.300   Median :0.1200  
+##  Mean   : -8.6                   Mean   :0.362   Mean   :0.1843  
+##  3rd Qu.: -6.7                   3rd Qu.:0.550   3rd Qu.:0.2600  
+##  Max.   : -4.8                   Max.   :1.180   Max.   :0.8400  
+##  NA&#39;s   :117                     NA&#39;s   :26      NA&#39;s   :26      
+##  redshift_lower    false_alarm_rate     p_astro           final_mass       
+##  Min.   :-0.5300   Length:119         Length:119         Length:119        
+##  1st Qu.:-0.2200   Class :character   Class :character   Class :character  
+##  Median :-0.1200   Mode  :character   Mode  :character   Mode  :character  
+##  Mean   :-0.1526                                                           
+##  3rd Qu.:-0.0700                                                           
+##  Max.   : 0.0000                                                           
+##  NA&#39;s   :26                                                                
+##  final_mass_upper final_mass_lower 
+##  Min.   :  1.30   Min.   :-33.600  
+##  1st Qu.:  4.05   1st Qu.:-11.000  
+##  Median :  8.60   Median : -6.600  
+##  Mean   : 12.65   Mean   : -7.763  
+##  3rd Qu.: 16.00   3rd Qu.: -2.750  
+##  Max.   :100.00   Max.   : -0.660  
+##  NA&#39;s   :28       NA&#39;s   :28</code></pre>
+<p>Observamos que tenemos seis variables de tipo caracter: tres tienen
+el tipo adecuado, pero hay otras tres que deberían ser de tipo numérico:
+false_alarm_rate, p_astro y final_mass. Esto debemos corregirlo, para
+ello los transformaremos en numéricos:</p>
+<pre class="r"><code> dataset$false_alarm_rate &lt;- as.numeric(dataset$false_alarm_rate)</code></pre>
+<pre><code>## Warning: NAs introducidos por coerción</code></pre>
+<pre class="r"><code> dataset$p_astro &lt;- as.numeric(dataset$p_astro)</code></pre>
+<pre><code>## Warning: NAs introducidos por coerción</code></pre>
+<pre class="r"><code> dataset$final_mass &lt;- as.numeric(dataset$final_mass)</code></pre>
+<pre><code>## Warning: NAs introducidos por coerción</code></pre>
+<p>Ahora mostramos cómo queda el análisis estadístico:</p>
+<pre class="r"><code> summary(dataset)</code></pre>
+<pre><code>##      name             version            release               gps           
+##  Length:119         Length:119         Length:119         Min.   :1.126e+09  
+##  Class :character   Class :character   Class :character   1st Qu.:1.240e+09  
+##  Mode  :character   Mode  :character   Mode  :character   Median :1.249e+09  
+##                                                           Mean   :1.236e+09  
+##                                                           3rd Qu.:1.261e+09  
+##                                                           Max.   :1.269e+09  
+##                                                                              
+##      mass_1        mass_1_upper     mass_1_lower         mass_2     
+##  Min.   :  1.46   Min.   :  0.12   Min.   :-33.000   Min.   : 1.17  
+##  1st Qu.: 20.80   1st Qu.:  5.60   1st Qu.: -9.600   1st Qu.: 8.20  
+##  Median : 35.40   Median :  9.80   Median : -6.000   Median :23.30  
+##  Mean   : 34.95   Mean   : 13.13   Mean   : -7.668   Mean   :21.62  
+##  3rd Qu.: 42.20   3rd Qu.: 14.10   3rd Qu.: -3.200   3rd Qu.:29.00  
+##  Max.   :105.50   Max.   :104.00   Max.   : -0.100   Max.   :76.00  
+##  NA&#39;s   :26       NA&#39;s   :26       NA&#39;s   :26        NA&#39;s   :26     
+##   mass_2_upper     mass_2_lower      network_snr    network_snr_upper
+##  Min.   : 0.070   Min.   :-36.500   Min.   : 6.00   Min.   :0.1000   
+##  1st Qu.: 2.200   1st Qu.: -9.300   1st Qu.: 9.10   1st Qu.:0.2000   
+##  Median : 5.500   Median : -5.900   Median :10.70   Median :0.3000   
+##  Mean   : 6.985   Mean   : -6.971   Mean   :12.01   Mean   :0.3349   
+##  3rd Qu.: 9.300   3rd Qu.: -2.400   3rd Qu.:13.15   3rd Qu.:0.4000   
+##  Max.   :27.100   Max.   : -0.060   Max.   :33.00   Max.   :1.7000   
+##  NA&#39;s   :26       NA&#39;s   :26                        NA&#39;s   :33       
+##  network_snr_lower    distance    distance_upper distance_lower   
+##  Min.   :-1.2000   Min.   :  40   Min.   :   7   Min.   :-4290.0  
+##  1st Qu.:-0.6000   1st Qu.: 930   1st Qu.: 340   1st Qu.:-1500.0  
+##  Median :-0.4000   Median :1620   Median : 770   Median : -650.0  
+##  Mean   :-0.4837   Mean   :2098   Mean   :1371   Mean   : -995.8  
+##  3rd Qu.:-0.3000   3rd Qu.:3280   3rd Qu.:1930   3rd Qu.: -380.0  
+##  Max.   :-0.2000   Max.   :8280   Max.   :7000   Max.   :  -15.0  
+##  NA&#39;s   :33        NA&#39;s   :26     NA&#39;s   :26     NA&#39;s   :26       
+##     chi_eff         chi_eff_upper    chi_eff_lower      total_mass    
+##  Min.   :-0.29000   Min.   :0.0200   Min.   :-0.510   Min.   :  3.40  
+##  1st Qu.:-0.03000   1st Qu.:0.1500   1st Qu.:-0.310   1st Qu.: 31.62  
+##  Median : 0.05000   Median :0.2100   Median :-0.220   Median : 58.75  
+##  Mean   : 0.07989   Mean   :0.2173   Mean   :-0.229   Mean   : 57.90  
+##  3rd Qu.: 0.15000   3rd Qu.:0.2600   3rd Qu.:-0.130   3rd Qu.: 74.65  
+##  Max.   : 0.68000   Max.   :0.5000   Max.   :-0.010   Max.   :182.30  
+##  NA&#39;s   :26         NA&#39;s   :26       NA&#39;s   :26       NA&#39;s   :37      
+##  total_mass_upper total_mass_lower    chirp_mass     chirp_mass_upper
+##  Min.   :  0.30   Min.   :-35.700   Min.   : 1.186   Min.   : 0.001  
+##  1st Qu.:  4.20   1st Qu.:-12.000   1st Qu.: 9.000   1st Qu.: 0.660  
+##  Median :  9.45   Median : -7.650   Median :24.400   Median : 3.500  
+##  Mean   : 13.71   Mean   : -8.512   Mean   :23.095   Mean   : 4.720  
+##  3rd Qu.: 17.82   3rd Qu.: -2.800   3rd Qu.:30.900   3rd Qu.: 7.300  
+##  Max.   :100.00   Max.   : -0.100   Max.   :76.000   Max.   :23.000  
+##  NA&#39;s   :37       NA&#39;s   :37        NA&#39;s   :26       NA&#39;s   :26      
+##  chirp_mass_lower  detector_frame_chirp_mass detector_frame_chirp_mass_upper
+##  Min.   :-17.400   Min.   : 0.900            Min.   : 6.00                  
+##  1st Qu.: -5.000   1st Qu.: 1.508            1st Qu.:12.55                  
+##  Median : -2.600   Median : 3.075            Median :19.10                  
+##  Mean   : -3.400   Mean   : 8.742            Mean   :19.10                  
+##  3rd Qu.: -0.600   3rd Qu.: 6.317            3rd Qu.:25.65                  
+##  Max.   : -0.001   Max.   :49.800            Max.   :32.20                  
+##  NA&#39;s   :26        NA&#39;s   :103               NA&#39;s   :117                    
+##  detector_frame_chirp_mass_lower    redshift     redshift_upper  
+##  Min.   :-12.4                   Min.   :0.010   Min.   :0.0000  
+##  1st Qu.:-10.5                   1st Qu.:0.190   1st Qu.:0.0600  
+##  Median : -8.6                   Median :0.300   Median :0.1200  
+##  Mean   : -8.6                   Mean   :0.362   Mean   :0.1843  
+##  3rd Qu.: -6.7                   3rd Qu.:0.550   3rd Qu.:0.2600  
+##  Max.   : -4.8                   Max.   :1.180   Max.   :0.8400  
+##  NA&#39;s   :117                     NA&#39;s   :26      NA&#39;s   :26      
+##  redshift_lower    false_alarm_rate       p_astro         final_mass    
+##  Min.   :-0.5300   Min.   :  0.00001   Min.   :0.0500   Min.   :  7.20  
+##  1st Qu.:-0.2200   1st Qu.:  0.03700   1st Qu.:0.7700   1st Qu.: 32.15  
+##  Median :-0.1200   Median :  0.55000   Median :0.9700   Median : 56.30  
+##  Mean   :-0.1526   Mean   :  4.78454   Mean   :0.8574   Mean   : 55.32  
+##  3rd Qu.:-0.0700   3rd Qu.:  4.43750   3rd Qu.:1.0000   3rd Qu.: 69.70  
+##  Max.   : 0.0000   Max.   :140.00000   Max.   :1.0000   Max.   :172.90  
+##  NA&#39;s   :26        NA&#39;s   :37          NA&#39;s   :38       NA&#39;s   :28      
+##  final_mass_upper final_mass_lower 
+##  Min.   :  1.30   Min.   :-33.600  
+##  1st Qu.:  4.05   1st Qu.:-11.000  
+##  Median :  8.60   Median : -6.600  
+##  Mean   : 12.65   Mean   : -7.763  
+##  3rd Qu.: 16.00   3rd Qu.: -2.750  
+##  Max.   :100.00   Max.   : -0.660  
+##  NA&#39;s   :28       NA&#39;s   :28</code></pre>
 <p>La importancia de este conjunto de datos radica en nuestra curiosidad
 por conocer más a fondo los datos que componen las detecciones de ondas
 gravitacionales detectadas por el consorcio LIGO, VIRGO y KAGRA, tanto
@@ -673,12 +848,12 @@ casos.</h3>
 ##                        redshift                  redshift_upper 
 ##                              26                              26 
 ##                  redshift_lower                false_alarm_rate 
-##                              26                               0 
+##                              26                              37 
 ##                         p_astro                      final_mass 
-##                               0                               0 
+##                              38                              28 
 ##                final_mass_upper                final_mass_lower 
 ##                              28                              28</code></pre>
-<p>Ahora las de valores vacíos:</p>
+<p>Ahora las de valores vacíos, por si los hubiera:</p>
 <pre class="r"><code>colSums(dataset==&quot;&quot;)</code></pre>
 <pre><code>##                            name                         version 
 ##                               0                               0 
@@ -711,11 +886,33 @@ casos.</h3>
 ##                        redshift                  redshift_upper 
 ##                              NA                              NA 
 ##                  redshift_lower                false_alarm_rate 
-##                              NA                               0 
+##                              NA                              NA 
 ##                         p_astro                      final_mass 
-##                              20                              27 
+##                              NA                              NA 
 ##                final_mass_upper                final_mass_lower 
 ##                              NA                              NA</code></pre>
+<p>En función a las dos tablas obtenidas vamos viendo qué valores no
+podemos usar debido a su enorme cantidad de valores vacíos. Por ejemplo:
+detector_frame_chirp_mass, detector_frame_chirp_mass_upper y
+detector_frame_chirp_mass_lower tienen casi todos sus valores nulos. Por
+este motivo descartaremos estas columnas. Al ser datos del propio
+detector no son críticos y no afectarán a nuestro resultado final.</p>
+<p>Sobre el resto de valores nulos, podemos observar que coinciden las
+cantidades en muchos valores ¿Podrá corresponderse con los datos de las
+ondas gravitacionales descartadas? Realmente tenemos un campo en el que
+se indica si la detección es buena o no, ese es el campo release.
+Debemos transformarlo para poder clasificar las detecciones entre
+confirmadas o no y así poder sacar mejores conclusiones.Vamos a meter
+ese valor en una nueva variable:</p>
+<pre class="r"><code>library(stringr)
+dataset$tipo &lt;- ifelse(str_detect(dataset$release, &quot;confident&quot;), &quot;confident&quot;, &quot;marginal&quot;)</code></pre>
+<p>Veamos ahora cuántas son detecciones de ondas gravitacionales
+confirmadas y cuántas no. Lo haremos mostrando un gráfico:</p>
+<pre class="r"><code>plot(factor(dataset$tipo),main=&quot;Número de detecciones por tipo&quot;,xlab=&quot;Tipo&quot;, ylab=&quot;Cantidad&quot;,col = &quot;blue&quot;)</code></pre>
+<p><img src="data:image/png;base64,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" width="672" /></p>
+<p>Tenemos unas 29 detecciones de tipo marginal, hemos tomado además
+como marginales aquellas que no estaban etiquetadas. Parece que los
+valores nulos se corresponden con estas detecciones.</p>
 </div>
 <div id="identifica-y-gestiona-los-valores-extremos." class="section level3" number="2.3.2">
 <h3><span class="header-section-number">2.3.2</span> Identifica y
