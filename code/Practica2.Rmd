@@ -198,12 +198,38 @@ Observamos que tenemos seis variables de tipo caracter: tres tienen el tipo adec
 
 ```
 
+También convertimos las fechas de formato GPS a fecha:
+
+```{r}
+dataset$fecha <- as.POSIXct(dataset$gps, origin="1980-01-06", tz="UTC")
+```
+
+También tenemos un campo en el que se indica si la detección es buena o no, ese es el campo release. Debemos transformarlo para poder clasificar las detecciones entre confirmadas o no y así poder sacar mejores conclusiones.Vamos a meter ese valor en una nueva variable:
+
+```{r}
+library(stringr)
+dataset$tipo <- ifelse(str_detect(dataset$release, "confident"), "confident", "marginal")
+```
+
+Veamos ahora cuántas son detecciones de ondas gravitacionales confirmadas y cuántas no. Lo haremos mostrando un gráfico:
+
+```{r}
+plot(factor(dataset$tipo),main="Número de detecciones por tipo",xlab="Tipo", ylab="Cantidad",col = "blue")
+```
+
+Tenemos unas 29 detecciones de tipo marginal, hemos tomado además como marginales aquellas que no estaban etiquetadas. Para hacer cálculos nos quedaremos como las etiquetadas como buenas.
+
+```{r}
+# Eliminamos las filas de las ondas gravitacionales no confirmadas
+dt_confident <- dataset[dataset$tipo!='marginal',]
+```
+
 Ahora mostramos cómo queda el análisis estadístico:
 
 ```{r}
- summary(dataset)
+ summary(dt_confident)
 ```
-  
+   
 La importancia de este conjunto de datos radica en nuestra curiosidad por conocer más a fondo los datos que componen las detecciones de ondas gravitacionales detectadas por el consorcio LIGO, VIRGO y KAGRA, tanto las confirmadas como las rechazadas. La idea es aprender más de estos fenómenos gracias a sus datos.
 
 Con estos datos queremos intentar responder algunas preguntas:
@@ -227,25 +253,23 @@ Aquí podemos hacer un análisis de los datos relevantes como los que hemos vist
 Veamos las estadísticas de valores nulos:
 
 ```{r}
-colSums(is.na(dataset))
+colSums(is.na(dt_confident))
 ```
 
 En función a las dos tablas obtenidas vamos viendo qué valores no podemos usar debido a su enorme cantidad de valores vacíos. Por ejemplo: detector_frame_chirp_mass, detector_frame_chirp_mass_upper y detector_frame_chirp_mass_lower tienen casi todos sus valores nulos. Por este motivo descartaremos estas columnas. Al ser datos del propio detector no son críticos y no afectarán a nuestro resultado final.
 
-Sobre el resto de valores nulos, podemos observar que coinciden las cantidades en muchos valores ¿Podrá corresponderse con los datos de las ondas gravitacionales descartadas? Realmente tenemos un campo en el que se indica si la detección es buena o no, ese es el campo release. Debemos transformarlo para poder clasificar las detecciones entre confirmadas o no y así poder sacar mejores conclusiones.Vamos a meter ese valor en una nueva variable:
+Procederemos a eliminar las columnas con valores vacíos, así como variables que no aportan nada.
 
 ```{r}
-library(stringr)
-dataset$tipo <- ifelse(str_detect(dataset$release, "confident"), "confident", "marginal")
+# Eliminar columnas de un dataframe
+columnas_borrar <- c("version","release","gps","detector_frame_chirp_mass","detector_frame_chirp_mass_upper","detector_frame_chirp_mass_lower", "tipo")
+ondas_g <- dt_confident[ , !(names(dt_confident) %in% columnas_borrar)]
+
+head(ondas_g,5)
 ```
 
-Veamos ahora cuántas son detecciones de ondas gravitacionales confirmadas y cuántas no. Lo haremos mostrando un gráfico:
 
-```{r}
-plot(factor(dataset$tipo),main="Número de detecciones por tipo",xlab="Tipo", ylab="Cantidad",col = "blue")
-```
 
-Tenemos unas 29 detecciones de tipo marginal, hemos tomado además como marginales aquellas que no estaban etiquetadas. Parece que los valores nulos se corresponden con estas detecciones.
 
 ### Identifica y gestiona los valores extremos.
 
