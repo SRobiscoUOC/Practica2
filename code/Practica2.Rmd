@@ -6,6 +6,7 @@ output:
   pdf_document:
     highlight: zenburn
     toc: yes
+    latex_engine: xelatex
   word_document: default
   html_document:
     highlight: default
@@ -166,7 +167,7 @@ Observamos que tenemos 119 registros corespondientes con datos de ondas gravitac
 
 Observamos que tenemos seis variables de tipo caracter: tres tienen el tipo adecuado, pero hay otras tres que deberían ser de tipo numérico: false_alarm_rate, p_astro y final_mass. Esto debemos corregirlo, para ello los transformaremos en numéricos:
 
-```{r}
+```{r warning=FALSE}
  dataset$false_alarm_rate <- as.numeric(dataset$false_alarm_rate)
  dataset$p_astro <- as.numeric(dataset$p_astro)
  dataset$final_mass <- as.numeric(dataset$final_mass)
