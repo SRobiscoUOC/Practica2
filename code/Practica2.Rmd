@@ -3,6 +3,10 @@ title: 'Práctica 2: ¿Cómo realizar la limpieza y análisis de datos?'
 author: "David Fernández Álvarez y Sara Robisco Cavite"
 date: "Diciembre 2022"
 output:
+  pdf_document:
+    highlight: zenburn
+    toc: yes
+  word_document: default
   html_document:
     highlight: default
     number_sections: yes
@@ -11,10 +15,6 @@ output:
     toc_depth: 2
     includes:
       in_header: 75.584-PEC-header.html
-  word_document: default
-  pdf_document:
-    highlight: zenburn
-    toc: yes
 ---
 
 ```{r setup, include=FALSE}
@@ -187,12 +187,7 @@ Observamos que tenemos 119 registros corespondientes con datos de ondas gravitac
   
 **final_mass_lower**
   valor mínimo del rángo de error de la masa final.
-  
-Ahora que hemos descrito los datos de nuestro dataset los conoceremos mejor obteniendo sus estadísticas básicas:
 
-```{r}
-summary(dataset)
-```
 
 Observamos que tenemos seis variables de tipo caracter: tres tienen el tipo adecuado, pero hay otras tres que deberían ser de tipo numérico: false_alarm_rate, p_astro y final_mass. Esto debemos corregirlo, para ello los transformaremos en numéricos:
 
@@ -233,11 +228,6 @@ Veamos las estadísticas de valores nulos:
 
 ```{r}
 colSums(is.na(dataset))
-```
-
-Ahora las de valores vacíos, por si los hubiera:
-```{r}
-colSums(dataset=="")
 ```
 
 En función a las dos tablas obtenidas vamos viendo qué valores no podemos usar debido a su enorme cantidad de valores vacíos. Por ejemplo: detector_frame_chirp_mass, detector_frame_chirp_mass_upper y detector_frame_chirp_mass_lower tienen casi todos sus valores nulos. Por este motivo descartaremos estas columnas. Al ser datos del propio detector no son críticos y no afectarán a nuestro resultado final.
