@@ -6,6 +6,7 @@ output:
   pdf_document:
     highlight: zenburn
     toc: yes
+    toc_depth: 2
     latex_engine: xelatex
   word_document: default
   html_document:
@@ -22,192 +23,13 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-****
-# Introducción
-****
-## Presentación
-En esta práctica se elabora un caso práctico orientado a aprender a identificar los datos relevantes para un proyecto analítico y usar las herramientas de integración, limpieza, validación y análisis de las mismas.
+\pagebreak
 
-# Tareas a realizar
+# 1. Introducción y descripción del dataset
 
-## Descripción del dataset. ¿Por qué es importante y qué pregunta/problema pretende responder?
+## 1.1. ¿Por qué es importante y qué pregunta/problema pretende responder?
 
-Para describir el dataset de una forma visual, cargamos las librerías ggplot2 y dplry.
-
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-# https://cran.r-project.org/web/packages/ggplot2/index.html
-if (!require('ggplot2')) install.packages('ggplot2'); library('ggplot2')
-# https://cran.r-project.org/web/packages/dplyr/index.html
-if (!require('dplyr')) install.packages('dplyr'); library('dplyr')
-```
-
-Ahora cargamos el fichero de datos.
-
-```{r}
-dataset <- read.csv('../dataset/detecciones_ondas_gravitacionales.csv',stringsAsFactors = FALSE)
-filas=dim(dataset)[1]
-```
-
-Para describir el conjunto de datos en profundidad vamos a comenzar verificando su estructura:
-
-```{r}
-str(dataset)
-```
-
-Observamos que tenemos 119 registros corespondientes con datos de ondas gravitacionales y 36 variables que los caracterizan. A continuación describimos las variables:
-
-**name**
-  cadena de caracteres con el identificador de la detección de la onda gravitacional.
-  
-**version**
-  versión de la detección. Se revisan periódicamente.
-  
-**release**
-  datos de la comunicación de la detección, si es confirmada, si es descartada...
-  
-**gps**
-  fecha y hora de la detección en formato GPS.
-  
-**mass_1**
-  masa del primer objeto en masas solares.
-  
-**mass_1_upper**
-  valor máximo del rángo de error de la masa del primer objeto.
-  
-**mass_1_lower**
-  valor mínimo del rángo de error de la masa del primer objeto.
-  
-**mass_2**
-  masa del segundo objeto en masas solares.
-  
-**mass_2_upper**
-  valor máximo del rángo de error de la masa del segundo objeto.
-  
-**mass_2_lower**
-  valor mínimo del rángo de error de la masa del segundo objeto.
-  
-**network_snr**
-  ratio señal/ruido en la red.
-  
-**metwork_snr_upper**
-  valor máximo del rángo de error del ratio señal/ruido en la red.
-  
-**metwork_snr_lower**
-  valor mínimo del rángo de error del ratio señal/ruido en la red.
-  
-**distance** 
-  distancia a la que se ha producido la colisión, en Megapársecs.
-  
-**distance_upper**
-  valor máximo del rángo de error de la distancia.
-  
-**distance_lower**
-  valor mínimo del rángo de error de la distancia.
-  
-**chi_eff**
-  correlación de campo z de las fusiones de agujeros negros binarios.
-  
-**chi_eff_upper**
-  valor máximo del rángo de error de la correlación de campo.
-  
-**chi_eff_lower**
-  valor mínimo del rángo de error de la correlación de campo.
-  
-**total_mass**
-  masa total de ambos cuerpos. Medida en masas solares.
-  
-**total_mass_upper**
-  valor máximo del rángo de error de la masa total.
-  
-**total_mass_lower**
-  valor mínimo del rángo de error de la masa total.
-  
-**chirp_mass**
-  masa efectiva de un sistema binario. Medida en masas solares.
-  
-**chirp_mass_upper**
-  valor máximo del rángo de error de la masa efectiva.
-  
-**chirp_mass_lower**
-  valor mínimo del rángo de error de la masa efectiva.
-  
-**detector_Frame_Chirp_Mass**
-  marco del detector de la masa efectiva. Medida en masas solares.
-  
-**detector_Frame_Chirp_mass_upper**
-  valor máximo del rángo de error del marco del detector de la masa efectiva.
-  
-**detector_Frame_Chirp_mass_lower**
-  valor mínimo del rángo de error del marco del detector de la masa efectiva.
-  
-**redshift**
-  corrimiento al rojo, marca la velocidad a la que se alejan de nosotros.
-  
-**redshift_upper**
-  valor máximo del rángo de error del corrimiento al rojo.
-  
-**redshift_lower**
-  valor mínimo del rángo de error del corrimiento al rojo.
-  
-**false_Alarm_Rate**
-  tasa de falsa alarma. La medida es años elevado a -1.
-  
-**p_astro**
-  probabilidad de que el evento tenga un origen astrofísico.
-  
-**final_mass**
-  masa final del objeto resultante tras la colisión. Medida en masas solares.
-  
-**final_mass_upper**
-  valor máximo del rángo de error de la masa final.
-  
-**final_mass_lower**
-  valor mínimo del rángo de error de la masa final.
-
-
-Observamos que tenemos seis variables de tipo caracter: tres tienen el tipo adecuado, pero hay otras tres que deberían ser de tipo numérico: false_alarm_rate, p_astro y final_mass. Esto debemos corregirlo, para ello los transformaremos en numéricos:
-
-```{r warning=FALSE}
- dataset$false_alarm_rate <- as.numeric(dataset$false_alarm_rate)
- dataset$p_astro <- as.numeric(dataset$p_astro)
- dataset$final_mass <- as.numeric(dataset$final_mass)
-
-```
-
-También convertimos las fechas de formato GPS a fecha:
-
-```{r}
-dataset$fecha <- as.POSIXct(dataset$gps, origin="1980-01-06", tz="UTC")
-```
-
-También tenemos un campo en el que se indica si la detección es buena o no, ese es el campo release. Debemos transformarlo para poder clasificar las detecciones entre confirmadas o no y así poder sacar mejores conclusiones.Vamos a meter ese valor en una nueva variable:
-
-```{r}
-library(stringr)
-dataset$tipo <- ifelse(str_detect(dataset$release, "confident"), "confident", "marginal")
-```
-
-Veamos ahora cuántas son detecciones de ondas gravitacionales confirmadas y cuántas no. Lo haremos mostrando un gráfico:
-
-```{r}
-plot(factor(dataset$tipo),main="Número de detecciones por tipo",xlab="Tipo"
-     , ylab="Cantidad",col = "blue")
-```
-
-Tenemos unas 29 detecciones de tipo marginal, hemos tomado además como marginales aquellas que no estaban etiquetadas. Para hacer cálculos nos quedaremos como las etiquetadas como buenas.
-
-```{r}
-# Eliminamos las filas de las ondas gravitacionales no confirmadas
-dt_confident <- dataset[dataset$tipo!='marginal',]
-```
-
-Ahora mostramos cómo queda el análisis estadístico:
-
-```{r}
- summary(dt_confident)
-```
-   
-La importancia de este conjunto de datos radica en nuestra curiosidad por conocer más a fondo los datos que componen las detecciones de ondas gravitacionales detectadas por el consorcio LIGO, VIRGO y KAGRA, tanto las confirmadas como las rechazadas. La idea es aprender más de estos fenómenos gracias a sus datos.
+La importancia de este conjunto de datos radica en nuestra curiosidad por conocer más a fondo los datos que componen las **detecciones de ondas gravitacionales** detectadas por el consorcio **LIGO, VIRGO y KAGRA**, tanto las confirmadas como las rechazadas. La idea es aprender más de estos fenómenos gracias a sus datos.
 
 Con estos datos queremos intentar responder algunas preguntas:
 
@@ -218,34 +40,222 @@ Con estos datos queremos intentar responder algunas preguntas:
 * ¿Qué hace que una señal se considere buena o se descarte?
 
 * ¿Cuáles son las detecciones más cercanas? ¿Y las más lejanas?
+
+
+## 1.2. Descripción visual y estructura
+
+Para describir el dataset de una forma visual, cargamos las librerías `ggplot2` y `dplry`:
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# https://cran.r-project.org/web/packages/ggplot2/index.html
+if (!require('ggplot2')) install.packages('ggplot2'); library('ggplot2')
+# https://cran.r-project.org/web/packages/dplyr/index.html
+if (!require('dplyr')) install.packages('dplyr'); library('dplyr')
+```
+
+Ahora cargamos el fichero de datos:
+
+```{r}
+dataset <- read.csv('../dataset/detecciones_ondas_gravitacionales.csv',                             stringsAsFactors = FALSE)
+filas=dim(dataset)[1]
+```
+
+Para describir el conjunto de datos en profundidad vamos a comenzar verificando su estructura:
+
+```{r}
+str(dataset)
+```
+
+Observamos que tenemos **119 registros** corespondientes con datos de ondas gravitacionales y **36 variables** que los caracterizan. A continuación describimos las variables:
+
+- **name**:
+  cadena de caracteres con el identificador de la detección de la onda gravitacional.
+  
+- **version**:
+  versión de la detección. Se revisan periódicamente.
+  
+- **release**:
+  datos de la comunicación de la detección, si es confirmada, si es descartada...
+  
+- **gps**:
+  fecha y hora de la detección en formato GPS.
+  
+- **mass_1**:
+  masa del primer objeto en masas solares.
+  
+- **mass_1_upper**:
+  valor máximo del rángo de error de la masa del primer objeto.
+  
+- **mass_1_lower**:
+  valor mínimo del rángo de error de la masa del primer objeto.
+  
+- **mass_2**:
+  masa del segundo objeto en masas solares.
+  
+- **mass_2_upper**:
+  valor máximo del rángo de error de la masa del segundo objeto.
+  
+- **mass_2_lower**:
+  valor mínimo del rángo de error de la masa del segundo objeto.
+  
+- **network_snr**:
+  ratio señal/ruido en la red.
+  
+- **network_snr_upper**:
+  valor máximo del rángo de error del ratio señal/ruido en la red.
+  
+- **network_snr_lower**:
+  valor mínimo del rángo de error del ratio señal/ruido en la red.
+  
+- **distance**: 
+  distancia a la que se ha producido la colisión, en Megapársecs.
+  
+- **distance_upper**:
+  valor máximo del rángo de error de la distancia.
+  
+- **distance_lower**:
+  valor mínimo del rángo de error de la distancia.
+  
+- **chi_eff**:
+  correlación de campo z de las fusiones de agujeros negros binarios.
+  
+- **chi_eff_upper**:
+  valor máximo del rángo de error de la correlación de campo.
+  
+- **chi_eff_lower**:
+  valor mínimo del rángo de error de la correlación de campo.
+  
+- **total_mass**:
+  masa total de ambos cuerpos. Medida en masas solares.
+  
+- **total_mass_upper**:
+  valor máximo del rángo de error de la masa total.
+  
+- **total_mass_lower**:
+  valor mínimo del rángo de error de la masa total.
+  
+- **chirp_mass**:
+  masa efectiva de un sistema binario. Medida en masas solares.
+  
+- **chirp_mass_upper**:
+  valor máximo del rángo de error de la masa efectiva.
+  
+- **chirp_mass_lower**:
+  valor mínimo del rángo de error de la masa efectiva.
+  
+- **detector_Frame_Chirp_Mass**:
+  marco del detector de la masa efectiva. Medida en masas solares.
+  
+- **detector_Frame_Chirp_mass_upper**:
+  valor máximo del rángo de error del marco del detector de la masa efectiva.
+  
+- **detector_Frame_Chirp_mass_lower**:
+  valor mínimo del rángo de error del marco del detector de la masa efectiva.
+  
+- **redshift**:
+  corrimiento al rojo, marca la velocidad a la que se alejan de nosotros.
+  
+- **redshift_upper**:
+  valor máximo del rángo de error del corrimiento al rojo.
+  
+- **redshift_lower**:
+  valor mínimo del rángo de error del corrimiento al rojo.
+  
+- **false_Alarm_Rate**:
+  tasa de falsa alarma. La medida es años elevado a -1.
+  
+- **p_astro**:
+  probabilidad de que el evento tenga un origen astrofísico.
+  
+- **final_mass**:
+  masa final del objeto resultante tras la colisión. Medida en masas solares.
+  
+- **final_mass_upper**:
+  valor máximo del rángo de error de la masa final.
+  
+- **final_mass_lower**:
+  valor mínimo del rángo de error de la masa final.
+
+## 1.3. Transformación de variables
+
+Observamos que tenemos **seis variables** de tipo **caracter**: tres tienen el tipo adecuado, pero hay otras tres que deberían ser de tipo **numérico**: `false_alarm_rate`, `p_astro` y `final_mass`. Esto debemos corregirlo, para ello los transformaremos en numéricos:
+
+```{r warning=FALSE}
+ dataset$false_alarm_rate <- as.numeric(dataset$false_alarm_rate)
+ dataset$p_astro <- as.numeric(dataset$p_astro)
+ dataset$final_mass <- as.numeric(dataset$final_mass)
+
+```
+
+También convertimos las fechas de [formato GPS](https://gssc.esa.int/navipedia/index.php/Time_References_in_GNSS#GPS_Time_.28GPST.29) a fecha:
+
+```{r}
+dataset$fecha <- as.POSIXct(dataset$gps, origin="1980-01-06", tz="UTC")
+```
+
+También tenemos un campo en el que se indica si la detección es buena o no, ese es el campo `release`. Debemos transformarlo para poder clasificar las detecciones entre confirmadas o no y así poder sacar mejores conclusiones. Vamos a meter ese valor en una nueva variable:
+
+```{r}
+library(stringr)
+dataset$tipo <- ifelse(str_detect(dataset$release, "confident"), "confident", "marginal")
+```
+
+Veamos ahora cuántas son detecciones de ondas gravitacionales **confirmadas** y cuántas no. Lo haremos mostrando un gráfico:
+
+```{r}
+plot(factor(dataset$tipo),main="Número de detecciones por tipo",xlab="Tipo"
+     , ylab="Cantidad",col = "blue")
+```
+
+Tenemos unas **29 detecciones de tipo marginal**, hemos tomado además como marginales aquellas que no estaban etiquetadas. Para hacer cálculos nos quedaremos como las etiquetadas como **buenas**:
+
+```{r}
+# Eliminamos las filas de las ondas gravitacionales no confirmadas
+dt_confident <- dataset[dataset$tipo!='marginal',]
+```
+
+Ahora mostramos cómo queda el análisis estadístico:
+
+```{r}
+summary(dt_confident)
+```
   
   
-## Integración y selección de los datos de interés a analizar. Puede ser el resultado de adicionar diferentes datasets o una subselección útil de los datos originales, en base al objetivo que se quiera conseguir.
+# 2. Integración y selección de los datos de interés a analizar
 
-Esta parte la obtendremos a partir de la limpieza de los datos, dejando como producto final un dataset con los datos relevantes.
+### Puede ser el resultado de adicionar diferentes datasets o una subselección útil de los datos originales, en base al objetivo que se quiera conseguir.
 
-## Limpieza de los datos.
+Esta parte la obtendremos a partir de la **limpieza de los datos**, dejando como producto final un dataset con los datos relevantes.
+
+## 2.1. Limpieza de los datos
 
 ### ¿Los datos contienen ceros o elementos vacíos? Gestiona cada uno de estos casos.
-Veamos las estadísticas de valores nulos:
+
+Veamos las estadísticas de **valores nulos**:
 
 ```{r}
 colSums(is.na(dt_confident))
 ```
 
-En función a las dos tablas obtenidas vamos viendo qué valores no podemos usar debido a su enorme cantidad de valores vacíos. Por ejemplo: detector_frame_chirp_mass, detector_frame_chirp_mass_upper y detector_frame_chirp_mass_lower tienen casi todos sus valores nulos. Por este motivo descartaremos estas columnas. Al ser datos del propio detector no son críticos y no afectarán a nuestro resultado final. También tenemos valores vacíos en los campos total_mass y final_mass. Son poquitos valores por lo que los imputaremos mediante regresión lineal. Comenzamos por final_mass:
+En función a las dos tablas obtenidas vamos viendo qué valores no podemos usar debido a su enorme cantidad de valores vacíos. 
+
+Por ejemplo: `detector_frame_chirp_mass`, `detector_frame_chirp_mass_upper` y
+`detector_frame_chirp_mass_lower` tienen casi todos sus valores **nulos**. Por este motivo **descartaremos estas columnas**. Al ser datos del propio detector no son críticos y no afectarán a nuestro resultado final. 
+
+También tenemos **valores vacíos** en los campos `total_mass` y `final_mass`. Son poquitos valores por lo que los imputaremos mediante **regresión lineal**. Comenzamos por `final_mass`:
 
 ```{r}
-## Tomamos los registros con valores NA
+# Tomamos los registros con valores NA
 vacios <- which(is.na(dt_confident$final_mass)) 
 
-#Generamos nuestro modelo de regresión lineal
+# Generamos nuestro modelo de regresión lineal
 modelo_fm <- lm(final_mass ~ mass_1+mass_2+chirp_mass, data=dt_confident)
-## Evaluamos el modelo
+
+# Evaluamos el modelo
 summary(modelo_fm)
 
 ```
-Vemos que el coeficiente de determinación ajustado es 0.9993 por lo que el ajuste es muy bueno. Lo aplicamos:
+Vemos que el **coeficiente de determinación** ajustado es **0.9993** por lo que el ajuste es muy bueno. Lo aplicamos:
 
 ```{r}
 # Rellenamos los datos
@@ -254,22 +264,21 @@ dt_confident$final_mass[vacios] <- predict(modelo_fm,
 
 # Redondeamos a dos decimales
 dt_confident$final_mass[vacios] <- round(dt_confident$final_mass[vacios],2)
-
 ```
 
-Hacemos lo mismo con total_mass:
+Hacemos lo mismo con `total_mass`:
 
 ```{r}
-## Tomamos los registros con valores NA
+# Tomamos los registros con valores NA
 vacios <- which(is.na(dt_confident$total_mass)) 
 
-#Generamos nuestro modelo de regresión lineal
+# Generamos nuestro modelo de regresión lineal
 modelo_tm <- lm(total_mass ~ chirp_mass+chi_eff+final_mass, data=dt_confident)
-## Evaluamos el modelo
-summary(modelo_tm)
 
+# Evaluamos el modelo
+summary(modelo_tm)
 ```
-Vemos que el coeficiente de determinación ajustado es 0.9999 por lo que el ajuste es muy bueno. Lo aplicamos:
+Vemos que el **coeficiente de determinación** ajustado es **0.9999** por lo que el ajuste es muy bueno. Lo aplicamos:
 
 ```{r}
 # Rellenamos los datos
@@ -278,37 +287,45 @@ dt_confident$total_mass[vacios] <- predict(modelo_tm,
 
 # Redondeamos a dos decimales
 dt_confident$total_mass[vacios] <- round(dt_confident$total_mass[vacios],2)
-
 ```
-Procederemos a eliminar las columnas con valores vacíos, así como variables que no aportan nada. Dejando nuestro conjunto de datos listo para trabajar con él.
+Procederemos a **eliminar las columnas con valores vacíos**, así como variables que no aportan nada, dejando nuestro conjunto de datos listo para trabajar con él:
 
 ```{r}
-# Eliminar columnas de un dataframe
+# Eliminar columnas del dataframe
 columnas_borrar <- c("version","release","gps","detector_frame_chirp_mass",
                      "detector_frame_chirp_mass_upper",
                      "detector_frame_chirp_mass_lower", "tipo",
                      "network_snr_upper","network_snr_lower",
                      "final_mass_upper","final_mass_lower","total_mass_upper",
                      "total_mass_lower","false_alarm_rate","p_astro")
+
 ondas_g <- dt_confident[ , !(names(dt_confident) %in% columnas_borrar)]
 
 head(ondas_g,5)
 ```
 
+## 2.2. Identificación y gestión de los valores extremos
 
-### Identifica y gestiona los valores extremos.
+Creamos un subset "`ondas_g_num`" que contenga solamente las columnas **numéricas** de nuestro dataset para analizar sus valores extremos o *outliers*:
 
-## Análisis de los datos.
+```{r}
+ondas_g_num <- ondas_g %>% select(-name, -fecha)
+boxplot(ondas_g_num)
+```
 
-### Selección de los grupos de datos que se quieren analizar/comparar (p.ej., si se van a comparar grupos de datos, ¿cuáles son estos grupos y qué tipo de análisis se van a aplicar?)
+# 3. Análisis de los datos
 
-### Comprobación de la normalidad y homogeneidad de la varianza.
+## 3.1. Selección de los grupos de datos que se quieren analizar/comparar
+### Por ejemplo, si se van a comparar grupos de datos, ¿cuáles son estos grupos y qué tipo de análisis se van a aplicar?
 
-### Aplicación de pruebas estadísticas para comparar los grupos de datos. En función de los datos y el objetivo del estudio, aplicar pruebas de contraste de hipótesis, correlaciones, regresiones, etc. Aplicar al menos tres métodos de análisis diferentes.
+## 3.2. Comprobación de la normalidad y homogeneidad de la varianza
 
-## Representación de los resultados a partir de tablas y gráficas. 
+## 3.3. Aplicación de pruebas estadísticas para comparar los grupos de datos
+### En función de los datos y el objetivo del estudio, aplicar pruebas de contraste de hipótesis, correlaciones, regresiones, etc. Aplicar al menos tres métodos de análisis diferentes
+
+# 4. Representación de los resultados a partir de tablas y gráficas 
 Este apartado se puede responder a lo largo de la práctica, sin necesidad de concentrar todas las representaciones en este punto de la práctica. Lo dejo aquí para acordarnos de poner todas las gráficas y tablas posibles.
 
-## Resolución del problema.
+# 5. Resolución del problema
 
-## Vídeo.
+# 6. Vídeo
