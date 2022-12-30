@@ -312,7 +312,7 @@ Creamos un subset "`ondas_g_num`" que contenga solamente las columnas **numéric
 ondas_g_num <- ondas_g %>% select(-name, -fecha)
 
 # Creamos un panel de 4x1
-par(mfrow = c(4,1), mar = c(1,5,2,2), oma = c(1,0,1,1), cex=0.05)
+par(mfrow = c(4,1), mar = c(1,5,2,2), oma = c(1,0,1,1))
 
 # Creamos una lista de variables para representar en cada panel
 vars <- list(c("mass_1", "mass_1_upper", "mass_1_lower", "mass_2",
