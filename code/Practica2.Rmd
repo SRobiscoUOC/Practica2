@@ -310,7 +310,23 @@ Creamos un subset "`ondas_g_num`" que contenga solamente las columnas **numéric
 
 ```{r}
 ondas_g_num <- ondas_g %>% select(-name, -fecha)
-boxplot(ondas_g_num)
+
+# Creamos un panel de 4x1
+par(mfrow = c(4,1), mar = c(1,5,2,2), oma = c(1,0,1,1), cex=0.05)
+
+# Creamos una lista de variables para representar en cada panel
+vars <- list(c("mass_1", "mass_1_upper", "mass_1_lower", "mass_2",
+               "mass_2_upper", "mass_2_lower"), 
+             c("distance", "distance_upper", "distance_lower"), 
+             c("chi_eff", "chi_eff_upper", "chi_eff_lower", "chirp_mass",
+               "chirp_mass_upper", "chirp_mass_lower"), 
+             c("total_mass", "redshift", "redshift_upper", "redshift_lower",
+               "final_mass", "network_snr"))
+
+# Iteramos y creamos un boxplot por cada grupo de variables
+for (i in 1:4) {
+  boxplot(ondas_g_num[, vars[[i]]], cex.axis=0.8)
+}
 ```
 
 # 3. Análisis de los datos
