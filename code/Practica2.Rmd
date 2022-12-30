@@ -234,6 +234,7 @@ Esta parte la obtendremos a partir de la **limpieza de los datos**, dejando como
 Veamos las estadísticas de **valores nulos**:
 
 ```{r}
+# Lo hacemos así porque hemos tenido problemas con la librería missForest
 colSums(is.na(dt_confident))
 ```
 
@@ -357,10 +358,63 @@ Dado que no tenemos dudas ni pruebas para asegurar que la técnica de obtención
 ## 3.1. Selección de los grupos de datos que se quieren analizar/comparar
 ### Por ejemplo, si se van a comparar grupos de datos, ¿cuáles son estos grupos y qué tipo de análisis se van a aplicar?
 
+Hemos decidido comparar los valores: mass_1, mass_2, chirp_mass y final_mass. La finalidad es conocer si hay correlación entre la masa final tras la colisión con la masa de cada cuerpo y la masa del sistema binario.
+
 ## 3.2. Comprobación de la normalidad y homogeneidad de la varianza
+
+Comenzaremos comprobando la normalidad, para ello emplearemos el test de Shapiro-Wilk. Comenzaremos por Mass_1:
+
+```{r}
+shapiro.test(ondas_g$mass_1)
+```
+
+Observamos que el p-valor es menor que 0.05, por lo que se rechaza la hipótesis nula. Esto indica que los datos no siguen una distribución normal. Veamos qué ocurre con Mass_2:
+```{r}
+shapiro.test(ondas_g$mass_2)
+```
+
+De nuevo el p-valor es menor que 0.05, por lo que se rechaza la hipótesis nula. Esto indica que los datos no siguen una distribución normal. Veamos qué ocurre con chirp_mass:
+
+```{r}
+shapiro.test(ondas_g$chirp_mass)
+```
+
+Otra vez el p-valor es menor que 0.05, por lo que se rechaza la hipótesis nula. Por tanto, los datos no siguen una distribución normal. Veamos qué ocurre con final_mass:
+
+```{r}
+shapiro.test(ondas_g$final_mass)
+```
+
+Aquí también el p-valor es menor que 0.05, por lo que se rechaza la hipótesis nula. Por este motivo, los datos no siguen una distribución normal. Procedemos ahora a calcular la Homocedasticidad. Al tener datos que no cumplen con la normalidad, debemos aplicar el test de Fligner-Killeen. Lo haremos por parejas con respecto al resultado, la masa final.
+
+```{r}
+fligner.test(mass_1 ~ final_mass, data = ondas_g)
+```
+
+Observamos que el p-valor devuelto es muy superior a 0.05, por lo que podemos concluir que la variable mass_1 presenta varianzas estadísticamente similares para los diferentes valores de final_mass. Veamos si ocurre lo mismo con la masa del segundo objeto:
+
+```{r}
+fligner.test(mass_2 ~ final_mass, data = ondas_g)
+```
+
+De manera similar, el p-valores superior a 0.05. Por lo que la masa del segundo objeto presenta varianzas estadísticamente parecidas a los diferentes valores de la masa final. Finalmente comparemos con la masa del sistema binario:
+
+```{r}
+fligner.test(chirp_mass ~ final_mass, data = ondas_g)
+```
+
+Como era de esperar, el p-valor es mayor a 0.05. Esto indica que la varianza de la masa del sistema binario antes de la colisión es muy similar a la varianza de la masa final tras la colisión.
+
+Obtenemos homocedasticidad en los tres casos.
 
 ## 3.3. Aplicación de pruebas estadísticas para comparar los grupos de datos
 ### En función de los datos y el objetivo del estudio, aplicar pruebas de contraste de hipótesis, correlaciones, regresiones, etc. Aplicar al menos tres métodos de análisis diferentes
+
+Como no se cumple la normalidad y los datos son claramente dependientes, para comparar datos aplicaremos pruebas no paramétricas como Wilcoxon. 
+
+Después aplicaremos regresión lineal para aproximar la relación de dependencia lineal entre la masa final y las masas individuales de cada cuerpo, así como la masa del sistema binario. 
+
+Finalmente estudiaremos la correlación de las variables aplicando el test de correlación.
 
 # 4. Representación de los resultados a partir de tablas y gráficas 
 Este apartado se puede responder a lo largo de la práctica, sin necesidad de concentrar todas las representaciones en este punto de la práctica. Lo dejo aquí para acordarnos de poner todas las gráficas y tablas posibles.
