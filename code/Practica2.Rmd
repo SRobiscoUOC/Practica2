@@ -308,7 +308,7 @@ head(ondas_g,5)
 
 Creamos un subset "`ondas_g_num`" que contenga solamente las columnas **numéricas** de nuestro dataset para analizar sus valores extremos o *outliers*.
 
-Tras esto, utilizamos la función `boxplot` para realizar un diagrama de :
+Tras esto, utilizamos la función `boxplot` para realizar un diagrama de caja por cada variable numérica, y obtenemos los valores *outliers* de aquellas que los tengan:
 
 ```{r}
 ondas_g_num <- ondas_g %>% select(-name, -fecha)
@@ -323,15 +323,34 @@ colors <- c("red", "orange", "yellow", "green", "blue", "brown",
             "darkblue", "darkred", "darkorchid", "royalblue", "slateblue")
 
 # Iteramos y creamos un boxplot por cada grupo de variables
+valores <- list()
 for (i in 1:21) {
-  boxplot(ondas_g_num[i], main = colnames(ondas_g_num[i]), xlab = "A",
-          col = colors[i])
+  valores <- append(valores,
+    boxplot(ondas_g_num[i], main = colnames(ondas_g_num[i]), 
+            xlab = "A", col = colors[i])
+    )
 }
 
 # Ponemos un título a la figura entera
 mtext("Diagramas de caja para identificar los valores extremos", 
       side = 3, line = -0.1, outer = TRUE, font = 2)
+
+# Obtenemos los valores "outliers" para cada variable, las que tengan
+for (i in 1:21) {
+  if (!is.null(valores[i]$out)) {
+    print(sprintf("Valores extremos para '%s':", colnames(ondas_g_num[i])))
+    print(valores[i]$out)
+  }
+}
 ```
+
+Como podemos observar, hay **3 variables** con valores *outliers*, las cuales son:
+
+- **`mass_2`**: Los valores outliers son `[87, 98.4, 105.5, 85]`
+- **`distance_lower`**: Los valores outliers son `[48, 40, 104, 47, 42.1, 33.6, 45.3, 27.8]`
+- **`chirp_mass_upper`**: Los valores outliers son `[-23, -30, -20, -21.7, -24.1, -33]`
+
+Dado que no tenemos dudas ni pruebas para asegurar que la técnica de obtención de los datos ha sido incorrecta, ni consideramos que el uso de éstos afecte negativamente a nuestro análisis, tomaremos estos valores extremos como **datos válidos** y los seguiremos incluyendo en nuestro dataset.
 
 # 3. Análisis de los datos
 
