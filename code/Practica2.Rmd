@@ -309,12 +309,9 @@ head(ondas_g,5)
 Creamos un subset "`ondas_g_num`" que contenga solamente las columnas **numéricas** de nuestro dataset para analizar sus valores extremos o *outliers*:
 
 ```{r}
-
 ondas_g_num <- ondas_g %>% select(-name, -fecha)
-invisible(lapply(1:ncol(ondas_g_num), function(i) boxplot(ondas_g_num[, i], xlab = names(ondas_g_num)[i],lwd = 0.5)))
-#boxplot(ondas_g_num)
+boxplot(ondas_g_num)
 ```
-
 
 # 3. Análisis de los datos
 
