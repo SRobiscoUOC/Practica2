@@ -189,7 +189,7 @@ Observamos que tenemos **seis variables** de tipo **caracter**: tres tienen el t
 
 También convertimos las fechas de [formato GPS](https://gssc.esa.int/navipedia/index.php/Time_References_in_GNSS#GPS_Time_.28GPST.29) a fecha y obtenemos el mes de la detección:
 
-```{r}
+```{r message=FALSE}
 library(lubridate)
 dataset$fecha <- as.POSIXct(dataset$gps, origin="1980-01-06", tz="UTC")
 dataset$mes <- month(dataset$fecha)
