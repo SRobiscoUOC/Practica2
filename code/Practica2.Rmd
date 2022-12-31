@@ -37,7 +37,7 @@ Con estos datos queremos intentar responder algunas preguntas:
 
 * ¿Influyen las masas de los objetos antes de la colisión en la masa del objeto resultante?
 
-* ¿Hay periodos del año donde haya más probabilidad de detecciones? Si es así ¿De qué región del espacio provienen?
+* ¿Hay periodos del año donde haya más probabilidad de detecciones de cierta masa? Si es así ¿De qué región del espacio provienen?
 
 * ¿Cuáles son las detecciones más cercanas? ¿Y las más lejanas?
 
@@ -452,7 +452,7 @@ Ahora aplicaremos regresión lineal para aproximar la relación de dependencia l
 
 ```{r}
 ondas_g_reducido <- ondas_g %>% select(mass_1, mass_2, chirp_mass, final_mass, mes)
-plot(ondas_g_reducido)
+plot(ondas_g_reducido, col = "blue")
 ```
 A simple vista observamos que hay correlación entre mass_1, mass_2, chirp_mass y final_mass. No existe correlación con el mes de detección, por lo que lo descartaremos. Veamos qué dice la regresión lineal de la correlación entre  mass_1, mass_2, chirp_mass y final_mass:
 
@@ -462,11 +462,40 @@ summary(modelo_lm)
 ```
 La regresión nos indica que hay una fuerte correlación entre mass_1, mass_2, chirp_mass y final_mass, dando lugar a un R-squared de 0.9994. De hecho en los primeros apartados hemos imputado valores a final_mass aplicando un modelo similar.
 
-Finalmente vamos a estudiar la correlación de las variables aplicando el test de correlación.
+Finalmente vamos a estudiar la correlación de las variables aplicando el método de correlación de Spearman.
 
-# 4. Representación de los resultados a partir de tablas y gráficas 
-Este apartado se puede responder a lo largo de la práctica, sin necesidad de concentrar todas las representaciones en este punto de la práctica. Lo dejo aquí para acordarnos de poner todas las gráficas y tablas posibles.
+```{r}
+cor.test(ondas_g$final_mass,ondas_g$mass_1, method="spearman")
+```
+El p-valor es significativo y el coeficiente de correlación es mayor a 0,97. Veamos si se cumple con la masa del segundo objeto:
 
-# 5. Resolución del problema
+```{r}
+cor.test(ondas_g$final_mass,ondas_g$mass_2, method="spearman")
+```
+El p-valor es significativo y el coeficiente de correlación es mayor a 0,93. Veamos si se cumple con la masa del sistema binario antes de la colisión:
+
+```{r}
+cor.test(ondas_g$final_mass,ondas_g$chirp_mass, method="spearman")
+```
+El p-valor es significativo y el coeficiente de correlación es mayor a 0,98.
+
+# 4. Resolución del problema
+
+A partir de los resultados obtenidos vamos a dar respuestas a las preguntas que nos hicimos al inicio:
+
+* **¿Qué intervalos de masas de objetos son los más detectados?** Esto lo vemos con la siguiente gráfica:
+
+```{r}
+plot(factor(ondas_g$final_mass),main="Número de detecciones por masa final"
+     ,xlab="Final_mass"
+     , ylab="Cantidad",col = "blue")
+```
+Observamos que las mayores detecciones rondan las 56,4 masas solares.
+
+* **¿Influyen las masas de los objetos antes de la colisión en la masa del objeto resultante?** Tras aplicar el test de correlación y la regresión hemos observado que sí influyen las masas de ambos objetos, así como la masa total del sistema binario que forman.
+
+* **¿Hay periodos del año donde haya más probabilidad de detecciones de cierta masa?** Si es así ¿De qué región del espacio provienen? Tras aplicar el análisis visual y la comparación de grupos hemos visto que la respuesta es negativa.
+
+* **¿Cuáles son las detecciones más cercanas? ¿Y las más lejanas?** En el análisis descriptivo que realizamos al inicio vimos que la detección más cercana se encontraba a 40 Megapársecs y la más lejana a 8280 Megapársecs.
 
 # 6. Vídeo
