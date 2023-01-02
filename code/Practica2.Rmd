@@ -303,6 +303,7 @@ columnas_borrar <- c("version","release","gps","detector_frame_chirp_mass",
                      "total_mass_lower","false_alarm_rate","p_astro")
 
 ondas_g <- dt_confident[ , !(names(dt_confident) %in% columnas_borrar)]
+write.csv(ondas_g, "../dataset/ondas_g_transformado.csv", row.names=FALSE)
 
 head(ondas_g,5)
 ```
