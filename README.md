@@ -10,7 +10,7 @@ Asignatura: M2.851 / Semestre: 2022-2 / Fecha: 08-11-2022
 
 ## Descripción del repositorio
 
-- **memoria.pdf**: documento de respuestas.
+- **Practica2.pdf**: documento de respuestas.
     
 - **/code/Practica2.Rmd**: código fuente del programa en R. 
     
