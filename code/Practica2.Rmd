@@ -535,7 +535,7 @@ Tras aplicar el análisis visual y la comparación de grupos hemos visto que la 
 
 En el análisis descriptivo que realizamos al inicio vimos que la detección más cercana se encontraba a **40 Megapársecs** y la más lejana a **8280 Megapársecs**.
 
-# 7. Tabla de contribuciones
+# 5. Tabla de contribuciones
 
 | **Contribuciones**          | **Firma**  |
 |:-----------------------------:|:------------:|
