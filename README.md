@@ -18,9 +18,11 @@ Asignatura: M2.851 / Semestre: 2022-2 / Fecha: 08-11-2022
 
 - **/dataset/detecciones_ondas_gravitacionales.csv**: fichero CSV con los datos obtenidos por nuestra aplicación en la práctica 1.
 
-- **7dataset/ondas_g_transformado.csv**: fichero CSV con los datos procesados y limpiados en esta práctica.
+- **/dataset/ondas_g_transformado.csv**: fichero CSV con los datos procesados y limpiados en esta práctica.
     
 
 ## Vídeo de presentación
 
 Enlace al vídeo de presentación de la práctica:
+
+https://drive.google.com/file/d/1zQJYfQ0E6sZwjw097MAU-TUJBuHxQvL7/view?usp=share_link
