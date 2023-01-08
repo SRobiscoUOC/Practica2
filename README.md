@@ -1,8 +1,6 @@
-# Práctica 1 - Tipología y Ciclo de Vida de los Datos
+# Práctica 2 - Tipología y Ciclo de Vida de los Datos
 
 Asignatura: M2.851 / Semestre: 2022-2 / Fecha: 08-11-2022
-
-URL del sitio web elegido: https://www.gw-openscience.org/
 
 ## Integrantes del equipo
 
@@ -14,22 +12,14 @@ URL del sitio web elegido: https://www.gw-openscience.org/
 
 - **memoria.pdf**: documento de respuestas.
     
-- **/source/scraper.py**: código fuente del programa principal. 
+- **/code/Practica2.Rmd**: código fuente del programa en R. 
     
-- **/source/scraper_functions.py**: código fuente con las funciones a las que invoca el programa principal para la obtención de datos.
-    
-- **/source/chromedriver.exe**: driver para poder hacer webscraping con Google Chrome.
-    
-- **/source/requirements.txt**: archivo con los requerimientos de librerías de nuestra aplicación.
-    
-- **/dataset/detecciones_ondas_gravitacionales.csv**: fichero CSV con los datos obtenidos por nuestra aplicación.
-    
+- **/code/75.584-PEC-header.html**: cabecera por si queremos ver el código en HTML.
 
-## Publicación en Zenodo
+- **/dataset/detecciones_ondas_gravitacionales.csv**: fichero CSV con los datos obtenidos por nuestra aplicación en la práctica 1.
 
-El dataset ha sido publicado en Zenodo con DOI 10.5281/zenodo.7308240
-
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7308240.svg)](https://doi.org/10.5281/zenodo.7308240)
+- **7dataset/ondas_g_transformado.csv**: fichero CSV con los datos procesados y limpiados en esta práctica.
+    
 
 ## Vídeo de presentación
 
