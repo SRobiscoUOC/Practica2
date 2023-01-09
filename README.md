@@ -1,6 +1,6 @@
 # Práctica 2 - Tipología y Ciclo de Vida de los Datos
 
-Asignatura: M2.851 / Semestre: 2022-2 / Fecha: 08-11-2022
+Asignatura: M2.851 / Semestre: 2022-2 / Fecha: 09-01-2023
 
 ## Integrantes del equipo
 
